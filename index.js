@@ -10,7 +10,9 @@ const subCategories = require("./routes/subCategories");
 const users = require("./routes/users");
 var path = require("path");
 const httpStatus = require("./utils/httpStatus");
+const fileUpload = require("express-fileupload");
 
+app.use(fileUpload());
 app.use(express.json());
 
 const cors = require("cors");
