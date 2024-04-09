@@ -147,9 +147,16 @@ CREATE TABLE `users` (
     `updated` timestamp NOT NULL DEFAULT (CURRENT_TIMESTAMP)
   );
   
-  CREATE TABLE `variation_options` (
+  CREATE TABLE `attribute_options` (
+    `id` INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
     `option_id` INTEGER PRIMARY KEY,
-    `variation_id` INTEGER,
+    `attribute_id` INTEGER,
+    `name` TEXT,
+    `created` timestamp NOT NULL DEFAULT (CURRENT_TIMESTAMP),
+    `updated` timestamp NOT NULL DEFAULT (CURRENT_TIMESTAMP)
+  );
+  CREATE TABLE `options` (
+    `id` INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
     `name` TEXT,
     `created` timestamp NOT NULL DEFAULT (CURRENT_TIMESTAMP),
     `updated` timestamp NOT NULL DEFAULT (CURRENT_TIMESTAMP)
@@ -272,7 +279,8 @@ CREATE TABLE `users` (
   
   ALTER TABLE `invoices` ADD FOREIGN KEY (`order_id`) REFERENCES `orders` (`id`);
   
-  ALTER TABLE `variation_options` ADD FOREIGN KEY (`variation_id`) REFERENCES `product_variations` (`id`);
+  ALTER TABLE `attribute_options` ADD FOREIGN KEY (`attribute_id`) REFERENCES `attributes` (`id`);
+  ALTER TABLE `attribute_options` ADD FOREIGN KEY (`option_id`) REFERENCES `options` (`id`);
   
   ALTER TABLE `cart` ADD FOREIGN KEY (`user_id`) REFERENCES `users` (`id`);
   

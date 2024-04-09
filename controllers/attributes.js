@@ -5,6 +5,16 @@ const httpStatus = require("../utils/httpStatus");
 const errorResponse = require("../utils/errorResponse");
 const { validationResult } = require("express-validator");
 
+exports.createAttribute = asyncWrapper(async (req, res, next) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    const error = errorResponse.create(errors.array(), 400, httpStatus.FAIL);
+    return next(error);
+  }
+  const data = await Attribute.create(req.body);
+  return res.json({ status: httpStatus.SUCCESS, data });
+});
+
 exports.getAttributes = asyncWrapper(async (req, res) => {
   const data = await Attribute.findAll();
   res.json({ status: httpStatus.SUCCESS, data });
@@ -23,16 +33,6 @@ exports.getAttribute = asyncWrapper(async (req, res, next) => {
     );
     return next(error);
   }
-  return res.json({ status: httpStatus.SUCCESS, data });
-});
-
-exports.createAttribute = asyncWrapper(async (req, res, next) => {
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    const error = errorResponse.create(errors.array(), 400, httpStatus.FAIL);
-    return next(error);
-  }
-  const data = await Attribute.create(req.body);
   return res.json({ status: httpStatus.SUCCESS, data });
 });
 
