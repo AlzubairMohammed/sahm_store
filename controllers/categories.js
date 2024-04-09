@@ -1,4 +1,4 @@
-const { Category } = require("../models");
+const { connection, sequelize } = require("../db/connection");
 const ErrorResponse = require("../utils/errorResponse");
 const fs = require("fs");
 const path = require("path");
@@ -6,9 +6,10 @@ const asyncWrapper = require("../middleware/asyncWrapper");
 const httpStatus = require("../utils/httpStatus");
 const errorResponse = require("../utils/errorResponse");
 const { validationResult } = require("express-validator");
+const { categories } = connection;
 
 exports.getCategories = asyncWrapper(async (req, res) => {
-  const data = await Category.findAll({
+  const data = await categories.findAll({
     include: ["SubCategories"],
   });
   res.json({ status: httpStatus.SUCCESS, data });
@@ -16,7 +17,7 @@ exports.getCategories = asyncWrapper(async (req, res) => {
 
 exports.getCategory = asyncWrapper(async (req, res, next) => {
   const id = req.params.id;
-  const data = await Category.findOne({
+  const data = await categories.findOne({
     where: { id },
     include: ["SubCategories"],
   });
@@ -47,7 +48,7 @@ exports.createCategory = async (req, res, next) => {
     });
   });
   req.body.image = fileName;
-  const data = await Category.create(req.body);
+  const data = await categories.create(req.body);
   return res.json({ status: httpStatus.SUCCESS, data });
 };
 
@@ -70,7 +71,7 @@ exports.updateCategory = asyncWrapper(async (req, res, next) => {
     });
   });
   req.body.image = fileName;
-  const [data] = await Category.update(req.body, {
+  const [data] = await categories.update(req.body, {
     where: { id },
   });
   if (!data) {
