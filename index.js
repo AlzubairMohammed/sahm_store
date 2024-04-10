@@ -5,7 +5,7 @@ const categories = require("./routes/categories");
 const attributes = require("./routes/attributes");
 // const variations = require("./routes/variations");
 // const prodcuts = require("./routes/products");
-// const subCategories = require("./routes/subCategories");
+const subCategories = require("./routes/subCategories");
 const users = require("./routes/users");
 var path = require("path");
 const httpStatus = require("./utils/httpStatus");
@@ -26,7 +26,7 @@ app.use(`${URL}/categories/`, categories);
 app.use(`${URL}/attributes/`, attributes);
 // app.use(`${URL}/variations/`, variations);
 // app.use(`${URL}/products/`, prodcuts);
-// app.use(`${URL}/subCategories/`, subCategories);
+app.use(`${URL}/subCategories/`, subCategories);
 app.use(`${URL}/users/`, users);
 
 app.use(express.static("."));
