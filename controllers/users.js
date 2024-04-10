@@ -115,7 +115,8 @@ exports.updateUser = asyncWrapper(async (req, res, next) => {
   const data = await users.update(req.body, {
     where: { id },
   });
-  if (!data) {
+  console.log(data);
+  if (!data[0]) {
     const error = errorResponse.create(
       `User with id = ${id} is not found`,
       404,
