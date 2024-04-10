@@ -65,7 +65,7 @@ exports.updateCategory = asyncWrapper(async (req, res, next) => {
 
 exports.deleteCategory = asyncWrapper(async (req, res, next) => {
   const id = req.params.id;
-  const data = await Category.destroy({ where: { id } });
+  const data = await categories.destroy({ where: { id } });
   if (!data) {
     const error = ErrorResponse.create(
       `Category with id = ${id} is not found`,
