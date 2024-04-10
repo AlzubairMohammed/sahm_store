@@ -1,4 +1,4 @@
-const { connection, sequelize } = require("../db/connection");
+const { connection } = require("../db/connection");
 const ErrorResponse = require("../utils/errorResponse");
 const fs = require("fs");
 const path = require("path");
@@ -10,7 +10,7 @@ const { categories } = connection;
 
 exports.getCategories = asyncWrapper(async (req, res) => {
   const data = await categories.findAll({
-    include: ["SubCategories"],
+    include: ["sub_categories"],
   });
   res.json({ status: httpStatus.SUCCESS, data });
 });
@@ -19,7 +19,7 @@ exports.getCategory = asyncWrapper(async (req, res, next) => {
   const id = req.params.id;
   const data = await categories.findOne({
     where: { id },
-    include: ["SubCategories"],
+    include: ["sub_categories"],
   });
   if (!data) {
     const error = ErrorResponse.create(
@@ -38,16 +38,6 @@ exports.createCategory = async (req, res, next) => {
     const error = errorResponse.create(errors.array(), 400, httpStatus.FAIL);
     return next(error);
   }
-  const { files } = req;
-  let fileName = "";
-  Object.keys(files).forEach((key) => {
-    fileName = Date.now() + files[key].name + "";
-    const filepath = path.join(__dirname, "../uploads", fileName);
-    files[key].mv(filepath, (err) => {
-      if (err) return res.status(500).json({ status: "error", message: err });
-    });
-  });
-  req.body.image = fileName;
   const data = await categories.create(req.body);
   return res.json({ status: httpStatus.SUCCESS, data });
 };
@@ -55,22 +45,10 @@ exports.createCategory = async (req, res, next) => {
 exports.updateCategory = asyncWrapper(async (req, res, next) => {
   const errors = validationResult(req);
   const id = req.params.id;
-  const { files } = req;
   if (!errors.isEmpty()) {
     const error = ErrorResponse.create(errors.array(), 400, httpStatus.FAIL);
     return next(error);
   }
-  Object.keys(files).forEach((key) => {
-    fileName = Date.now() + files[key].name + "";
-    const filepath = path.join(__dirname, "../uploads", fileName);
-    files[key].mv(filepath, (err) => {
-      if (err) {
-        const error = ErrorResponse.create(err, 400, httpStatus.FAIL);
-        return next(error);
-      }
-    });
-  });
-  req.body.image = fileName;
   const [data] = await categories.update(req.body, {
     where: { id },
   });

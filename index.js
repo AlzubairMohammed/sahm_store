@@ -1,7 +1,7 @@
 const express = require("express");
 const app = express();
 require("dotenv").config();
-// const categories = require("./routes/categories");
+const categories = require("./routes/categories");
 const attributes = require("./routes/attributes");
 // const variations = require("./routes/variations");
 // const prodcuts = require("./routes/products");
@@ -22,7 +22,7 @@ app.use(
 );
 
 const URL = process.env.ROUTES_URL;
-// app.use(`${URL}/categories/`, categories);
+app.use(`${URL}/categories/`, categories);
 app.use(`${URL}/attributes/`, attributes);
 // app.use(`${URL}/variations/`, variations);
 // app.use(`${URL}/products/`, prodcuts);
