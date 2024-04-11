@@ -1,4 +1,4 @@
-CREATE TABLE `users` (
+  CREATE TABLE `users` (
     `id` INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
     `name` varchar(255) NOT NULL,
     `email` varchar(25) NOT NULL,
@@ -163,6 +163,7 @@ CREATE TABLE `users` (
     `created` timestamp NOT NULL DEFAULT (CURRENT_TIMESTAMP),
     `updated` timestamp NOT NULL DEFAULT (CURRENT_TIMESTAMP)
   );
+
   CREATE TABLE `options` (
     `id` INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
     `name` TEXT,
@@ -313,6 +314,8 @@ CREATE TABLE `users` (
   ALTER TABLE `product_images` ADD CONSTRAINT `product_images_ibfk_1` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
   
   ALTER TABLE `product_variations` ADD CONSTRAINT `product_variations_ibfk_1` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  
+  ALTER TABLE `product_variations_images` ADD CONSTRAINT `product_variations_images_ibfk_1` FOREIGN KEY (`product_variation_id`) REFERENCES `product_variations` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
   
   ALTER TABLE `products` ADD CONSTRAINT `products_ibfk_1` FOREIGN KEY (`sub_category_id`) REFERENCES `sub_categories` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
   
