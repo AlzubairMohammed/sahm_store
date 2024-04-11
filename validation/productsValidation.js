@@ -1,6 +1,6 @@
 const { body } = require("express-validator");
 
-exports.productsValidation = () => {
+exports.productsValidator = () => {
   return [
     body("name")
       .notEmpty()
