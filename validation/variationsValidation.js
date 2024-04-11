@@ -1,6 +1,6 @@
 const { body } = require("express-validator");
 
-exports.variationsValidation = () => {
+exports.variationsValidator = () => {
   return [
     body("value").notEmpty().withMessage("value is required"),
     body("attribute_id").notEmpty().withMessage("attribute_id is required"),

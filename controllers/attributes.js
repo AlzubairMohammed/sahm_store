@@ -1,10 +1,10 @@
-const { connection, sequelize } = require("../db/connection");
+const { sequelize, models } = require("../db/connection");
 const ErrorResponse = require("../utils/errorResponse");
 const asyncWrapper = require("../middleware/asyncWrapper");
 const httpStatus = require("../utils/httpStatus");
 const errorResponse = require("../utils/errorResponse");
 const { validationResult } = require("express-validator");
-const { attributes, options } = connection;
+const { attributes, options } = models;
 
 exports.createAttribute = asyncWrapper(async (req, res, next) => {
   let transaction;

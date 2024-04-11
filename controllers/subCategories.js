@@ -1,4 +1,4 @@
-const { connection } = require("../db/connection");
+const { models } = require("../db/connection");
 const ErrorResponse = require("../utils/errorResponse");
 const fs = require("fs");
 const path = require("path");
@@ -6,7 +6,7 @@ const asyncWrapper = require("../middleware/asyncWrapper");
 const httpStatus = require("../utils/httpStatus");
 const errorResponse = require("../utils/errorResponse");
 const { validationResult } = require("express-validator");
-const { sub_categories, categories } = connection;
+const { sub_categories, categories } = models;
 
 exports.getSubCategories = asyncWrapper(async (req, res) => {
   const data = await sub_categories.findAll({

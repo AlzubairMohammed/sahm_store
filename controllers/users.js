@@ -2,8 +2,8 @@ const httpStatus = require("../utils/httpStatus");
 const asyncWrapper = require("../middleware/asyncWrapper");
 const errorResponse = require("../utils/errorResponse");
 const { validationResult } = require("express-validator");
-const { connection } = require("../db/connection");
-const { users } = connection;
+const { models } = require("../db/connection");
+const { users } = models;
 const bcrypt = require("bcryptjs");
 const jwt = require("../utils/jwt");
 
