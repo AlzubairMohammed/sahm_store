@@ -146,6 +146,14 @@ CREATE TABLE `users` (
     `created` timestamp NOT NULL DEFAULT (CURRENT_TIMESTAMP),
     `updated` timestamp NOT NULL DEFAULT (CURRENT_TIMESTAMP)
   );
+
+  CREATE TABLE `product_variations_images` (
+    `id` INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
+    `image` varchar(255) NOT NULL,
+    `product_variation_id` INT NOT NULL,
+    `created` timestamp NOT NULL DEFAULT (CURRENT_TIMESTAMP),
+    `updated` timestamp NOT NULL DEFAULT (CURRENT_TIMESTAMP)
+  );
   
   CREATE TABLE `attribute_options` (
     `id` INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
