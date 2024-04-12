@@ -30,9 +30,9 @@ exports.createProduct = asyncWrapper(async (req, res, next) => {
     variation.images.forEach(async (image) => {
       // handle image base64
       const imageBase64 = image.image;
-      const image = handleImageBase64(imageBase64, "productsVariations");
+      const imagePath = handleImageBase64(imageBase64, "productsVariations");
       await product_variations_images.bulkCreate(
-        { product_variation_id: variation.id, image },
+        { product_variation_id: variation.id, imagePath },
         { transaction }
       );
     });

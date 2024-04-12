@@ -174,9 +174,9 @@
   CREATE TABLE `variation_attributes` (
     `id` INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
     `name` varchar(255) NOT NULL,
-    `image` varchar(255) NOT NULL,
     `variation_id` INT NOT NULL,
     `attribute_id` INT NOT NULL,
+    `option_id` INT NOT NULL,
     `created` timestamp NOT NULL DEFAULT (CURRENT_TIMESTAMP),
     `updated` timestamp NOT NULL DEFAULT (CURRENT_TIMESTAMP)
   );
@@ -328,4 +328,6 @@
   ALTER TABLE `variation_attributes` ADD CONSTRAINT `variation_attributes_ibfk_1` FOREIGN KEY (`variation_id`) REFERENCES `product_variations` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
   
   ALTER TABLE `variation_attributes` ADD CONSTRAINT `variation_attributes_ibfk_2` FOREIGN KEY (`attribute_id`) REFERENCES `attributes` (`id`) ON UPDATE CASCADE;
+  
+  ALTER TABLE `variation_attributes` ADD CONSTRAINT `option_ibfk_3` FOREIGN KEY (`option_id`) REFERENCES `options` (`id`) ON UPDATE CASCADE;
   
