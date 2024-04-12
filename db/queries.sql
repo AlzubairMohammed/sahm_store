@@ -22,7 +22,8 @@
     `active` BOOLEAN DEFAULT false,
     `user_id` INT NOT NULL,
     `created` timestamp NOT NULL DEFAULT (CURRENT_TIMESTAMP),
-    `updated` timestamp NOT NULL DEFAULT (CURRENT_TIMESTAMP)
+    `updated` timestamp NOT NULL DEFAULT (CURRENT_TIMESTAMP),
+    FOREIGN KEY (user_id) REFERENCES users(id)
   );
   
   CREATE TABLE `promo_code` (
@@ -43,7 +44,9 @@
     `promo_code_id` INT NOT NULL,
     `usage_date` TIMESTAMP DEFAULT (CURRENT_TIMESTAMP),
     `created` timestamp NOT NULL DEFAULT (CURRENT_TIMESTAMP),
-    `updated` timestamp NOT NULL DEFAULT (CURRENT_TIMESTAMP)
+    `updated` timestamp NOT NULL DEFAULT (CURRENT_TIMESTAMP),
+    FOREIGN KEY (user_id) REFERENCES users(id),
+    FOREIGN KEY (promo_code_id) REFERENCES promo_code(id)
   );
   
   CREATE TABLE `categories` (
@@ -58,7 +61,8 @@
     `name` varchar(255) NOT NULL,
     `category_id` INT NOT NULL,
     `created` timestamp NOT NULL DEFAULT (CURRENT_TIMESTAMP),
-    `updated` timestamp NOT NULL DEFAULT (CURRENT_TIMESTAMP)
+    `updated` timestamp NOT NULL DEFAULT (CURRENT_TIMESTAMP),
+    FOREIGN KEY (category_id) REFERENCES categories(id)
   );
   
   CREATE TABLE `order_items` (
@@ -67,7 +71,9 @@
     `product_id` INT NOT NULL,
     `quantity` INT NOT NULL,
     `created` timestamp NOT NULL DEFAULT (CURRENT_TIMESTAMP),
-    `updated` timestamp NOT NULL DEFAULT (CURRENT_TIMESTAMP)
+    `updated` timestamp NOT NULL DEFAULT (CURRENT_TIMESTAMP),
+    FOREIGN KEY (order_id) REFERENCES orders(id),
+    FOREIGN KEY (product_id) REFERENCES products(id)
   );
   
   CREATE TABLE `orders` (
@@ -77,7 +83,8 @@
     `tracking_number` VARCHAR(255),
     `user_id` INT NOT NULL,
     `created` timestamp NOT NULL DEFAULT (CURRENT_TIMESTAMP),
-    `updated` timestamp NOT NULL DEFAULT (CURRENT_TIMESTAMP)
+    `updated` timestamp NOT NULL DEFAULT (CURRENT_TIMESTAMP),
+    FOREIGN KEY (user_id) REFERENCES users(id)
   );
   
   CREATE TABLE `transactions` (
@@ -88,7 +95,9 @@
     `currency` VARCHAR(3),
     `timestamp` TIMESTAMP DEFAULT (CURRENT_TIMESTAMP),
     `created` timestamp NOT NULL DEFAULT (CURRENT_TIMESTAMP),
-    `updated` timestamp NOT NULL DEFAULT (CURRENT_TIMESTAMP)
+    `updated` timestamp NOT NULL DEFAULT (CURRENT_TIMESTAMP),
+    FOREIGN KEY (order_id) REFERENCES orders(id),
+    FOREIGN KEY (payment_method_id) REFERENCES payment_methods(id)
   );
   
   CREATE TABLE `invoices` (
@@ -98,7 +107,8 @@
     `due_date` DATE,
     `status` ENUM ('Paid', 'Unpaid', 'Overdue'),
     `created` timestamp NOT NULL DEFAULT (CURRENT_TIMESTAMP),
-    `updated` timestamp NOT NULL DEFAULT (CURRENT_TIMESTAMP)
+    `updated` timestamp NOT NULL DEFAULT (CURRENT_TIMESTAMP),
+    FOREIGN KEY (order_id) REFERENCES orders(id)
   );
   
   CREATE TABLE `attributes` (
@@ -125,7 +135,7 @@
     `name` varchar(255) NOT NULL,
     `product_id` INT NOT NULL,
     `attribute_id` INT NOT NULL,
-    `image` varchar(255) NOT NULL,
+    `option_id` INT NOT NULL,
     `created` timestamp NOT NULL DEFAULT (CURRENT_TIMESTAMP),
     `updated` timestamp NOT NULL DEFAULT (CURRENT_TIMESTAMP)
   );
@@ -157,15 +167,7 @@
   
   CREATE TABLE `attribute_options` (
     `id` INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
-    `option_id` INTEGER PRIMARY KEY,
-    `attribute_id` INTEGER,
-    `name` TEXT,
-    `created` timestamp NOT NULL DEFAULT (CURRENT_TIMESTAMP),
-    `updated` timestamp NOT NULL DEFAULT (CURRENT_TIMESTAMP)
-  );
-
-  CREATE TABLE `options` (
-    `id` INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
+    `attribute_id` INTEGER NOT NULL,
     `name` TEXT,
     `created` timestamp NOT NULL DEFAULT (CURRENT_TIMESTAMP),
     `updated` timestamp NOT NULL DEFAULT (CURRENT_TIMESTAMP)
@@ -252,82 +254,4 @@
     `updated` TIMESTAMP DEFAULT (CURRENT_TIMESTAMP)
   );
   
-  CREATE INDEX `category_id` ON `sub_categories` (`category_id`);
-  
-  CREATE INDEX `user_id` ON `orders` (`user_id`);
-  
-  CREATE INDEX `sub_category_id` ON `products` (`sub_category_id`);
-  
-  CREATE INDEX `product_id` ON `product_attributes` (`product_id`);
-  
-  CREATE INDEX `attribute_id` ON `product_attributes` (`attribute_id`);
-  
-  CREATE INDEX `product_id` ON `product_images` (`product_id`);
-  
-  CREATE INDEX `product_id` ON `product_variations` (`product_id`);
-  
-  CREATE INDEX `variation_id` ON `variation_attributes` (`variation_id`);
-  
-  CREATE INDEX `attribute_id` ON `variation_attributes` (`attribute_id`);
-  
-  CREATE INDEX `user_id` ON `products_rate` (`user_id`);
-  
-  CREATE INDEX `product_id` ON `products_rate` (`product_id`);
-  
-  ALTER TABLE `notifications` ADD FOREIGN KEY (`user_id`) REFERENCES `users` (`id`);
-  
-  ALTER TABLE `shipping_addresses` ADD FOREIGN KEY (`user_id`) REFERENCES `users` (`id`);
-  
-  ALTER TABLE `user_promo_code` ADD FOREIGN KEY (`user_id`) REFERENCES `users` (`id`);
-  
-  ALTER TABLE `user_promo_code` ADD FOREIGN KEY (`promo_code_id`) REFERENCES `promo_code` (`id`);
-  
-  ALTER TABLE `transactions` ADD FOREIGN KEY (`order_id`) REFERENCES `orders` (`id`);
-  
-  ALTER TABLE `transactions` ADD FOREIGN KEY (`payment_method_id`) REFERENCES `payment_methods` (`id`);
-  
-  ALTER TABLE `invoices` ADD FOREIGN KEY (`order_id`) REFERENCES `orders` (`id`);
-  
-  ALTER TABLE `attribute_options` ADD FOREIGN KEY (`attribute_id`) REFERENCES `attributes` (`id`);
-  ALTER TABLE `attribute_options` ADD FOREIGN KEY (`option_id`) REFERENCES `options` (`id`);
-  
-  ALTER TABLE `cart` ADD FOREIGN KEY (`user_id`) REFERENCES `users` (`id`);
-  
-  ALTER TABLE `cart` ADD FOREIGN KEY (`product_id`) REFERENCES `products` (`id`);
-  
-  ALTER TABLE `favorites` ADD FOREIGN KEY (`user_id`) REFERENCES `users` (`id`);
-  
-  ALTER TABLE `favorites` ADD FOREIGN KEY (`product_id`) REFERENCES `products` (`id`);
-  
-  ALTER TABLE `facebook_auth` ADD FOREIGN KEY (`user_id`) REFERENCES `users` (`id`);
-  
-  ALTER TABLE `google_auth` ADD FOREIGN KEY (`user_id`) REFERENCES `users` (`id`);
-  
-  ALTER TABLE `payment_methods` ADD FOREIGN KEY (`user_id`) REFERENCES `users` (`id`);
-  
-  ALTER TABLE `orders` ADD CONSTRAINT `orders_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON UPDATE CASCADE;
-  
-  ALTER TABLE `product_attributes` ADD CONSTRAINT `product_attributes_ibfk_1` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
-  
-  ALTER TABLE `product_attributes` ADD CONSTRAINT `product_attributes_ibfk_2` FOREIGN KEY (`attribute_id`) REFERENCES `attributes` (`id`) ON UPDATE CASCADE;
-  
-  ALTER TABLE `product_images` ADD CONSTRAINT `product_images_ibfk_1` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
-  
-  ALTER TABLE `product_variations` ADD CONSTRAINT `product_variations_ibfk_1` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
-  
-  ALTER TABLE `product_variations_images` ADD CONSTRAINT `product_variations_images_ibfk_1` FOREIGN KEY (`product_variation_id`) REFERENCES `product_variations` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
-  
-  ALTER TABLE `products` ADD CONSTRAINT `products_ibfk_1` FOREIGN KEY (`sub_category_id`) REFERENCES `sub_categories` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
-  
-  ALTER TABLE `products_rate` ADD CONSTRAINT `products_rate_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON UPDATE CASCADE;
-  
-  ALTER TABLE `products_rate` ADD CONSTRAINT `products_rate_ibfk_2` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`) ON UPDATE CASCADE;
-  
-  ALTER TABLE `sub_categories` ADD CONSTRAINT `sub_categories_ibfk_1` FOREIGN KEY (`category_id`) REFERENCES `categories` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
-  
-  ALTER TABLE `variation_attributes` ADD CONSTRAINT `variation_attributes_ibfk_1` FOREIGN KEY (`variation_id`) REFERENCES `product_variations` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
-  
-  ALTER TABLE `variation_attributes` ADD CONSTRAINT `variation_attributes_ibfk_2` FOREIGN KEY (`attribute_id`) REFERENCES `attributes` (`id`) ON UPDATE CASCADE;
-  
-  ALTER TABLE `variation_attributes` ADD CONSTRAINT `option_ibfk_3` FOREIGN KEY (`option_id`) REFERENCES `options` (`id`) ON UPDATE CASCADE;
   

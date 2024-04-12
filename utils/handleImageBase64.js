@@ -1,5 +1,5 @@
 // function to convert base64 to file
-
+const fs = require("fs");
 exports.handleImageBase64 = (base64Data, path) => {
   const matches = base64Data.match(/^data:image\/([A-Za-z-+/]+);base64,(.+)$/);
 

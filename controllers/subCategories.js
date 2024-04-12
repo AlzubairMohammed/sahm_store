@@ -32,7 +32,7 @@ exports.getSubCategory = asyncWrapper(async (req, res, next) => {
   return res.json({ status: httpStatus.SUCCESS, data });
 });
 
-exports.createSubCategory = async (req, res, next) => {
+exports.createSubCategory = asyncWrapper(async (req, res, next) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     const error = errorResponse.create(errors.array(), 400, httpStatus.FAIL);
@@ -40,7 +40,7 @@ exports.createSubCategory = async (req, res, next) => {
   }
   const data = await sub_categories.create(req.body);
   return res.json({ status: httpStatus.SUCCESS, data });
-};
+});
 
 exports.updateSubCategory = asyncWrapper(async (req, res, next) => {
   const errors = validationResult(req);

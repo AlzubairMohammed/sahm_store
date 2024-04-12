@@ -4,7 +4,7 @@ const asyncWrapper = require("../middleware/asyncWrapper");
 const httpStatus = require("../utils/httpStatus");
 const errorResponse = require("../utils/errorResponse");
 const { validationResult } = require("express-validator");
-const { attributes, options } = models;
+const { attributes, attribute_options } = models;
 
 exports.createAttribute = asyncWrapper(async (req, res, next) => {
   let transaction;
@@ -14,13 +14,16 @@ exports.createAttribute = asyncWrapper(async (req, res, next) => {
     return next(error);
   }
   transaction = await sequelize.transaction();
-  const data = await attributes.bulkCreate(req.body, { transaction });
-  req.body.options.forEach(async (element) => {
-    await options.bulkCreate(
-      { attributeId: data.id, name: element },
-      { transaction }
-    );
-  });
+  // return res.json(req.body.name);
+  const data = await attributes.create(req.body, { transaction });
+  req.body.options.forEach(
+    asyncWrapper(async (element) => {
+      await attribute_options.bulkCreate(
+        { attributeId: data.id, name: element },
+        { transaction }
+      );
+    })
+  );
   await transaction.commit();
   return res.json({ status: httpStatus.SUCCESS, data });
 });
@@ -34,6 +37,10 @@ exports.getAttribute = asyncWrapper(async (req, res, next) => {
   const id = req.params.id;
   const data = await attributes.findOne({
     where: { id },
+    include: {
+      model: attribute_options,
+      as: "attribute_options",
+    },
   });
   if (!data) {
     const error = ErrorResponse.create(

@@ -7,12 +7,11 @@ const attributes = require("./routes/attributes");
 const prodcuts = require("./routes/products");
 const subCategories = require("./routes/subCategories");
 const users = require("./routes/users");
-var path = require("path");
 const httpStatus = require("./utils/httpStatus");
 const fileUpload = require("express-fileupload");
 
 app.use(fileUpload());
-app.use(express.json());
+app.use(express.json({ limit: "50mb" }));
 
 const cors = require("cors");
 app.use(
